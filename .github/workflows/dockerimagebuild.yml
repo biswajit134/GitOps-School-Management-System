@@ -35,6 +35,8 @@ jobs:
                 docker push biswajit134/sms_frontend:latest
                 docker push biswajit134/sms_backend:latest
                 echo "Docker images pushed to Docker Hub successfully"
+
+            - run: echo "Docker images build and push process completed successfully"
               
 
             # - name: Build and push Docker image
