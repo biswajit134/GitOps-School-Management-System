@@ -11,7 +11,7 @@ on:
         
 jobs:
     build:
-        runs-on: self-hosted
+        runs-on: ubuntu-latest
         steps:
             - name: Checkout code
               uses: actions/checkout@v2
@@ -39,9 +39,3 @@ jobs:
             - run: echo "Docker images build and push process completed successfully"
               
 
-            # - name: Build and push Docker image
-            #   uses: docker/build-push-action@v2
-            #   with:
-            #     context: .
-            #     push: true
-            #     tags: yourdockerhubusername/yourimagename:latest
