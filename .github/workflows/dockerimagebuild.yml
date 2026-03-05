@@ -46,8 +46,8 @@ jobs:
 
           - name: Gitleaks Scan
             run: |
-              gitleaks detect --source ./client 
-              gitleaks detect --source ./api 
+              gitleaks detect --source ./frontend
+              gitleaks detect --source ./backend
 
     trivy_fs_scan:
       runs-on: ubuntu-latest
