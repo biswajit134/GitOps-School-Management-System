@@ -108,7 +108,7 @@ jobs:
             uses: actions/checkout@v4
 
           - name: Run Trivy image scan for backend
-            uses: aquasecurity/trivy-action@0.28.0
+            uses: aquasecurity/trivy-action@0.69.3
             with:
               scan-type: image
               image-ref: biswajit134/sms_backend:latest
@@ -120,7 +120,7 @@ jobs:
               
               
           - name: Run Trivy image scan for frontend
-            uses: aquasecurity/trivy-action@0.28.0
+            uses: aquasecurity/trivy-action@0.69.3
             with:
               scan-type: image
               image-ref: biswajit134/sms_frontend:latest
