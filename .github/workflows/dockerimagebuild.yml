@@ -6,7 +6,6 @@ on:
             - devops
         paths-ignore:
             - README.md
-            # - .github/workflows/dockerimagebuild.yml
     workflow_dispatch:
         
         
