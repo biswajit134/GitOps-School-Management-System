@@ -6,6 +6,7 @@ on:
             - devops
         paths-ignore:
             - README.md
+            - .github/workflows/dockerimagebuild.yml
     workflow_dispatch:
         
         
@@ -88,7 +89,7 @@ jobs:
         - name: Run Trivy vulnerability scanner
           uses: aquasecurity/trivy-action@0.33.1
           with:
-            image-ref: 'docker.io/my-organization/my-app:latest'
+            image-ref: 'docker.io/biswajit134/sms_backend:latest'
             format: 'table'
             exit-code: '1'
             ignore-unfixed: true
