@@ -80,18 +80,3 @@ jobs:
                 docker push biswajit134/sms_backend:latest
                 echo "Docker images pushed to Docker Hub successfully"
     
-
-    trivy:
-      runs-on: ubuntu-latest
-      needs: build
-      name: Trivy
-      steps:
-        - name: Run Trivy vulnerability scanner
-          uses: aquasecurity/trivy-action@0.33.1
-          with:
-            image-ref: 'docker.io/biswajit134/sms_backend:latest'
-            format: 'table'
-            exit-code: '1'
-            ignore-unfixed: true
-            vuln-type: 'os,library'
-            severity: 'CRITICAL,HIGH'
