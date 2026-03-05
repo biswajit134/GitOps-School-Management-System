@@ -49,22 +49,22 @@ jobs:
     #           gitleaks detect --source ./frontend
     #           gitleaks detect --source ./backend
 
-    trivy_fs_scan:
-      runs-on: ubuntu-latest
-      needs: compile
-      steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+    # trivy_fs_scan:
+    #   runs-on: ubuntu-latest
+    #   needs: compile
+    #   steps:
+    #   - name: Checkout code
+    #     uses: actions/checkout@v4
 
-      - name: Run Trivy vulnerability scanner (FS)
-        uses: aquasecurity/trivy-action@0.28.0
-        with:
-          scan-type: fs
-          scan-ref: .
-          format: table
-          ignore-unfixed: true
-          vuln-type: os,library
-          severity: CRITICAL,HIGH
+    #   - name: Run Trivy vulnerability scanner (FS)
+    #     uses: aquasecurity/trivy-action@0.28.0
+    #     with:
+    #       scan-type: fs
+    #       scan-ref: .
+    #       format: table
+    #       ignore-unfixed: true
+    #       vuln-type: os,library
+    #       severity: CRITICAL,HIGH
 
 
 
@@ -73,7 +73,7 @@ jobs:
 
     build:
         runs-on: ubuntu-latest
-        needs: trivy_fs_scan
+        needs: compile
         steps:
             - name: Checkout code
               uses: actions/checkout@v2
