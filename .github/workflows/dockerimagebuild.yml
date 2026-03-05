@@ -6,7 +6,7 @@ on:
             - devops
         paths-ignore:
             - README.md
-            # - .github/workflows/dockerimagebuild.yml
+            - .github/workflows/dockerimagebuild.yml
     workflow_dispatch:
         
         
@@ -33,42 +33,6 @@ jobs:
           run: |
             cd backend
             find . -name "*.js" -exec node --check {} +
-    
-    # gitleaks-scan:
-    #   runs-on: ubuntu-latest
-    #   needs: compile
-    #   steps:
-    #       - name: Checkout code
-    #         uses: actions/checkout@v4
-
-    #       - name: Gitleaks Setup
-    #         uses: gitleaks/gitleaks-action@v2
-
-    #       - name: Gitleaks Scan
-    #         run: |
-    #           gitleaks detect --source ./frontend
-    #           gitleaks detect --source ./backend
-
-    # trivy_fs_scan:
-    #   runs-on: ubuntu-latest
-    #   needs: compile
-    #   steps:
-    #   - name: Checkout code
-    #     uses: actions/checkout@v4
-
-    #   - name: Run Trivy vulnerability scanner (FS)
-    #     uses: aquasecurity/trivy-action@0.28.0
-    #     with:
-    #       scan-type: fs
-    #       scan-ref: .
-    #       format: table
-    #       ignore-unfixed: true
-    #       vuln-type: os,library
-    #       severity: CRITICAL,HIGH
-
-
-
-
 
 
     build:
@@ -98,36 +62,3 @@ jobs:
                 docker push biswajit134/sms_backend:latest
                 echo "Docker images pushed to Docker Hub successfully"
     
-
-    trivy_image_scan:
-      runs-on: ubuntu-latest
-      needs:
-        - build
-      steps:
-          - name: Checkout (noop, keeps workspace consistent)
-            uses: actions/checkout@v4
-
-          - name: Run Trivy image scan for backend
-            uses: aquasecurity/trivy-action@0.69.3
-            with:
-              scan-type: image
-              image-ref: biswajit134/sms_backend:latest
-              format: table
-              exit-code: '0'                 # set to '1' to fail on vulns
-              ignore-unfixed: true
-              vuln-type: os,library
-              severity: CRITICAL,HIGH 
-              
-              
-          - name: Run Trivy image scan for frontend
-            uses: aquasecurity/trivy-action@0.69.3
-            with:
-              scan-type: image
-              image-ref: biswajit134/sms_frontend:latest
-              format: table
-              exit-code: '0'                 # set to '1' to fail on vulns
-              ignore-unfixed: true
-              vuln-type: os,library
-              severity: CRITICAL,HIGH   
-              
-
