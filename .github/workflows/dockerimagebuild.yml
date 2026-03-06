@@ -3,7 +3,6 @@ on:
     push:
         branches:
             - main
-            - devops
         paths-ignore:
             - README.md
             - .github/workflows/dockerimagebuild.yml
