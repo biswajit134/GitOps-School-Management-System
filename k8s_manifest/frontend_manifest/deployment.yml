@@ -1,28 +1,37 @@
+# Create namespace
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: sms_frontend
+---
+
+# Deployment
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: chai-app
+  name: sms-backend-deployment
+  namespace: sms_frontend
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: chai-app
+      app: sms-frontend
   template:
     metadata:
       labels:
-        app: chai-app
+        app: sms-frontend
     spec:
       containers:
-      - name: chai-app
-        image: trainwithshubham/chai-devopsssss:v1.0.0
+      - name: sms-frontend
+        image: biswajit134/sms_frontend:latest
         ports:
-        - containerPort: 80
+        - containerPort: 3000
         env:
-        - name: VITE_GEMINI_API
+        - name: REACT_APP_BASE_URL
           valueFrom:
-            secretKeyRef:
-              name: chai-app-secret
-              key: VITE_GEMINI_API
+            configMapKeyRef:
+              name: sms-frontend-config
+              key: REACT_APP_BASE_URL
         resources:
           requests:
             memory: "64Mi"

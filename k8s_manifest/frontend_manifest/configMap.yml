@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sms-frontend-config
+  namespace: sms_frontend
+data:
+  REACT_APP_BASE_URL: "5000"
