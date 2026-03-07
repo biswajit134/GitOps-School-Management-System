@@ -1,3 +1,4 @@
+# Secret for backend application
 apiVersion: v1
 kind: Secret
 metadata:
