@@ -1,9 +1,9 @@
-# Create namespace
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: sms-backend
----
+# # Create namespace
+# apiVersion: v1
+# kind: Namespace
+# metadata:
+#   name: sms-backend
+# ---
 
 # Deployment
 

@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: sms_frontend
+  name: sms-frontend
 ---
 
 # Deployment
