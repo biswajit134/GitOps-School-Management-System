@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: sms_backend
+  name: sms-backend
 ---
 
 # Deployment
@@ -12,7 +12,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: sms-backend-deployment
-  namespace: sms_backend
+  namespace: sms-backend
 spec:
   replicas: 3
   selector:

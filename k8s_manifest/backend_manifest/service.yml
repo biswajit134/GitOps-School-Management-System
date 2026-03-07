@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: sms-backend-service
-  namespace: sms_backend
+  namespace: sms-backend
 spec:
   selector:
     app: sms-backend
