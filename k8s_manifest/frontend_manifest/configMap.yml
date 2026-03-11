@@ -4,4 +4,4 @@ metadata:
   name: sms-frontend-config
   namespace: sms-frontend
 data:
-  REACT_APP_BASE_URL: "5000"
+  REACT_APP_BASE_URL: "http://localhost:5000"
