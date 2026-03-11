@@ -9,8 +9,8 @@ metadata:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: sms-backend-deployment
-  namespace: sms_frontend
+  name: sms-frontend-deployment
+  namespace: sms-frontend
 spec:
   replicas: 3
   selector:
