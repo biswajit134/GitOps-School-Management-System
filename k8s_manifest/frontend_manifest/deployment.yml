@@ -28,7 +28,7 @@ spec:
         - containerPort: 3000
         env:
         - name: REACT_APP_BASE_URL
-          value: http://20.204.203.179/
+          value: http://sms-backend-service.sms-backend.svc.cluster.local
           # valueFrom:
           #   configMapKeyRef:
           #     name: sms-frontend-config
