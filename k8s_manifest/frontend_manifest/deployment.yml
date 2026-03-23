@@ -28,7 +28,7 @@ spec:
         - containerPort: 3000
         env:
         - name: REACT_APP_BASE_URL
-          value: "http://13.71.54.161:5000"
+          value: http://13.71.54.161:5000
           # valueFrom:
           #   configMapKeyRef:
           #     name: sms-frontend-config
