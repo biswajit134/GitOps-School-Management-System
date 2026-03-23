@@ -14,7 +14,7 @@ metadata:
   name: sms-backend-deployment
   namespace: sms-backend
 spec:
-  replicas: 2
+  replicas: 5
   selector:
     matchLabels:
       app: sms-backend
