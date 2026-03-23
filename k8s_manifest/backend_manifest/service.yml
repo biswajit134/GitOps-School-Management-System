@@ -4,8 +4,6 @@ kind: Service
 metadata:
   name: sms-backend-service
   namespace: sms-backend
-  annotations:
-    service.beta.kubernetes.io/azure-load-balancer-internal: "true"
 spec:
   selector:
     app: sms-backend
