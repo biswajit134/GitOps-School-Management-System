@@ -1,59 +1,57 @@
-# Provider block to specify Azure as the provider
-variable "SUBSCRIPTION_ID" {
-    description = "Azure Subscription ID"
-    type        = string
-    sensitive = true
-}
 
-variable "CLIENT_ID" {
-    description = "Azure Client ID"
-    type        = string
-    sensitive = true
-}
-
-variable "CLIENT_SECRET" {
-    description = "Azure Client Secret"
-    type        = string
-    sensitive = true
-}
-
-
-variable "TENANT_ID" {
-    description = "Azure Tenant ID"
-    type        = string
-    sensitive = true
-}
-
-
-#For AKS cluster setup and configuration
-variable "rg_name" {
-  description = "Name for resource group"
-  type = string
-}
 
 variable "location" {
-  description = "Azure region for resources"
+  type    = string
+  default = "central india"
+}
+
+resource "random_id" "cluster_name" {
+  byte_length = 5
+}
+
+variable "cluster_name" {
   type = string
-  
+  default = "sms-cluster"
 }
 
 variable "node_count" {
-  description = "Number of nodes in AKS cluster"
   type = number
+  default = 1
+
 }
 
 variable "vm_size" {
-  description = "Size of the VMs in the AKS cluster"
   type = string
+  default = "Standard_A2_v2"
 }
-
-variable "disk_size_gb" {
-  description = "Disk size for AKS nodes in GB"
-  type = number
-}
-
-# In kubernetes_setup.tf, we will use these variables to configure the AKS cluster and Argo CD deployment.
 variable "ARGOCD_PASSWORD" {
-  description = "Argocd Password"
   type = string
+  default = "biswajit123"
 }
+
+
+
+# =====================================
+# ========== Github Repo Config =======
+# =====================================
+
+variable "github_repo" {
+  type = string
+  default = "https://github.com/biswajit134/GitOps-School-Management-System.git"
+  }
+
+variable "branch" {
+  type = string
+  default = "devops"
+}
+
+variable "backend_manifestfile_path" {
+  type = string
+  default = "k8s_manifest/backend_manifest"
+}
+
+variable "frontend_manifestfile_path" {
+  type = string
+  default = "k8s_manifest/frontend_manifest"
+}
+ 
