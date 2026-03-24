@@ -6,7 +6,7 @@ on:
             - devops
         paths-ignore:
             - README.md
-            - .github/workflows/dockerimagebuild.yml
+            # - .github/workflows/dockerimagebuild.yml
             - k8s_manifest
             - terraform
             - argocd
