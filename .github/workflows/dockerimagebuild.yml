@@ -52,14 +52,11 @@ jobs:
           # Disabling shallow clones is recommended for improving the relevancy of reporting
           fetch-depth: 0
       - name: SonarQube Scan
-        uses: SonarSource/sonarqube-scan-action@v5 # Ex: v4.1.0 or sha1, See the latest version at https://github.com/marketplace/actions/official-sonarqube-scan
+        uses: SonarSource/sonarcloud-github-action@master # Ex: v4.1.0 or sha1, See the latest version at https://github.com/marketplace/actions/official-sonarqube-scan
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          # SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-        with:
-          args: >
-            -Dsonar.projectKey=your_project_key
-            -Dsonar.organization=your_organization_key        
+          GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
+  
 
     build:
         runs-on: ubuntu-latest
@@ -88,3 +85,4 @@ jobs:
                 docker push biswajit134/sms_backend:latest
                 echo "Docker images pushed to Docker Hub successfully"
     
+
