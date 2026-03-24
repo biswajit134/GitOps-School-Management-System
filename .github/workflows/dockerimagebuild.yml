@@ -59,8 +59,10 @@ jobs:
         
         with:
           args: >
-            -Dsonar.projectKey=biswajit134
-            -Dsonar.organization=Biswajit Hazra
+            -Dsonar.projectKey=GitOps-School-Management-System
+
+
+            -Dsonar.organization=biswajit134
      
 
     build:
