@@ -1,0 +1,8 @@
+# ConfigMap for backend application
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sms-backend-config
+  namespace: sms-backend
+data:
+  PORT: "5000"

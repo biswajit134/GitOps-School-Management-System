@@ -1,0 +1,10 @@
+# Secret for backend application
+apiVersion: v1
+kind: Secret
+metadata:
+  name: sms-backend-secret
+  namespace: sms-backend
+type: Opaque
+data:
+  MONGO_URL: bW9uZ29kYitzcnY6Ly9iaXN3YWppdC1tYW5hZ2VyMTIzOmJhaHViYWxpM0lOT1hAc21zLWNsdXN0ZXIuM2RzeGEyci5tb25nb2RiLm5ldC8/YXBwTmFtZT1zbXMtY2x1c3Rlcg==
+  SECRET_KEY: Ymlzd2FqaXQxMjM0

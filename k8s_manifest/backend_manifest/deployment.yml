@@ -1,0 +1,55 @@
+# # Create namespace
+# apiVersion: v1
+# kind: Namespace
+# metadata:
+#   name: sms-backend
+# ---
+
+# Deployment
+
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sms-backend-deployment
+  namespace: sms-backend
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: sms-backend
+  template:
+    metadata:
+      labels:
+        app: sms-backend
+    spec:
+      containers:
+      - name: sms-backend
+        image: biswajit134/sms_backend:latest
+        ports:
+        - containerPort: 5000
+        env:
+        - name: MONGO_URL
+          valueFrom:
+            secretKeyRef:
+              name: sms-backend-secret
+              key: MONGO_URL
+
+        - name: PORT
+          valueFrom:
+            configMapKeyRef:
+              name: sms-backend-config
+              key: PORT
+
+        - name: SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: sms-backend-secret
+              key: SECRET_KEY
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "50m"
+          limits:
+            memory: "256Mi"
+            cpu: "200m"

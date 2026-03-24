@@ -1,0 +1,19 @@
+
+apiVersion: argoproj.io/v1alpha1   # API group for ArgoCD resources
+kind: Application                  # Resource type is "Application"
+metadata:
+  name: sms-backend-app            # Name of this ArgoCD application
+  namespace: sms-backend                # Must be created in the 'argocd' namespace
+spec:
+  project: default                 # ArgoCD Project (logical grouping of apps)
+  source:
+    repoURL: https://github.com/biswajit134/GitOps-School-Management-System.git   # Git repo containing manifests
+    targetRevision: devops           # Git branch or tag (e.g., main, dev, release-1.0)
+    path: k8s_manifest/backend_manifest   # Path inside repo where manifests live
+  destination:
+    server: https://kubernetes.default.svc   # Target cluster API
+    namespace: sms-backend              # Namespace in which to deploy the app
+  syncPolicy:                      # Defines how ArgoCD syncs the app
+    automated:                     # Enable auto-sync
+      prune: true                  # Delete resources removed from Git
+      selfHeal: true               # Fix drift if resources are changed manually

@@ -1,0 +1,15 @@
+# Service for backend application
+apiVersion: v1
+kind: Service
+metadata:
+  name: sms-backend-service
+  namespace: sms-backend
+spec:
+  selector:
+    app: sms-backend
+  ports:
+  - port: 5000
+    targetPort: 5000
+    protocol: TCP
+  type: ClusterIP
+  # type: LoadBalancer

@@ -3,10 +3,13 @@ on:
     push:
         branches:
             - main
-            - devops
         paths-ignore:
             - README.md
             - .github/workflows/dockerimagebuild.yml
+            - k8s_manifest
+            - terraform
+            - argocd
+            - temp_sms_frontend_manifest
     workflow_dispatch:
         
         
@@ -41,17 +44,25 @@ jobs:
     #     # sonarQube analysis
     # sonarqube:
     #   needs: compile
-    #   name: SonarQube
     #   runs-on: ubuntu-latest
     #   steps:
-    #       - uses: actions/checkout@v4
-    #         with:
-    #           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
-    #       - name: SonarQube Scan
-    #         uses: SonarSource/sonarqube-scan-action@v6
-    #         env:
-    #           SONAR_TOKEN:
+    #   - uses: actions/checkout@v4
+    #     with:
+    #       # Disabling shallow clones is recommended for improving the relevancy of reporting
+    #       fetch-depth: 0
+    #   - name: SonarQube Scan
+    #     uses: SonarSource/sonarcloud-github-action@master # Ex: v4.1.0 or sha1, See the latest version at https://github.com/marketplace/actions/official-sonarqube-scan
+    #     env:
+    #       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+    #       GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
+        
+    #     with:
+    #       args: >
+    #         -Dsonar.projectKey=GitOps-School-Management-System
 
+
+    #         -Dsonar.organization=biswajit134
+     
 
     build:
         runs-on: ubuntu-latest
@@ -80,3 +91,4 @@ jobs:
                 docker push biswajit134/sms_backend:latest
                 echo "Docker images pushed to Docker Hub successfully"
     
+
