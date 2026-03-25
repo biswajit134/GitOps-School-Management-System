@@ -66,11 +66,12 @@ The pipeline is divided into two main stages: Continuous Integration (CI) and Co
 | Category | Tools Used |
 | -------- | ---------- |
 |IaC       |Terraform
-|Backend | Terraform Cloud Platfrom
+|Terraform State Management | HashiCorp Cloud Platform
 | CI/CD Automation | GitHub Actions |
 | GitOps Controller | ArgoCD |
 | Containerization | Docker |
-| Orchestration |AKS|
+| Orchestration |Kubernetes|
+|Managed Kubernetes Providers| Azure Kubernetes Service (AKS)|
 |Cloud Provider|Azure
 Static Analysis|SonarQube
 Security Scanning|Trivy
