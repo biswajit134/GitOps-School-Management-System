@@ -10,6 +10,7 @@ on:
             - terraform
             - argocd
             - temp_sms_frontend_manifest
+            - SS
     workflow_dispatch:
         
         
