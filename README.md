@@ -70,7 +70,7 @@ The pipeline is divided into two main stages: Continuous Integration (CI) and Co
 | CI/CD Automation | GitHub Actions |
 | GitOps Controller | ArgoCD |
 | Containerization | Docker |
-| Orchestration |Kubernetes|
+| Orchestration |Kubernetes (K8s)|
 |Managed Kubernetes Providers| Azure Kubernetes Service (AKS)|
 |Cloud Provider|Azure
 Static Analysis|SonarQube
