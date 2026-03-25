@@ -8,15 +8,6 @@ Seamlessly track attendance, assess performance, and provide feedback. <br>
 Access records, view marks, and communicate effortlessly.
 </h3>
 
-<p>
-  <a href="https://youtu.be/ol650KwQkgY?si=rKcboqSv3n-e4UbC">Youtube Video</a>
-</p>
-
-<p>
-  <a href="https://www.linkedin.com/in/yogndrr/">LinkedIn</a>
-</p>
-
-
 # About
 
 The School Management System is a web-based application built using the MERN (MongoDB, Express.js, React.js, Node.js) stack. It aims to streamline school management, class organization, and facilitate communication between students, teachers, and administrators.
@@ -42,199 +33,79 @@ The School Management System is a web-based application built using the MERN (Mo
 - Database: MongoDB
 
 <br>
+<h1 align="center">♾️ DevOps Implementations with GitOps principle</h1>
 
-# Installation
 
-Clone the project:
+![image](https://img.shields.io/badge/Microsoft%20Azure-0078D4?style=for-the-badge&logo=Microsoft%20Azure&logoColor=white)  ![image](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=Docker&logoColor=white)  ![image](https://img.shields.io/badge/Kubernetes-326CE5?style=for-the-badge&logo=Kubernetes&logoColor=white)   ![image](https://img.shields.io/badge/Helm-0F1689?style=for-the-badge&logo=Helm&logoColor=white)  ![image](https://img.shields.io/badge/Argo-EF7B4D?style=for-the-badge&logo=Argo&logoColor=white)   ![image](https://img.shields.io/badge/GitHub%20Actions-2088FF?style=for-the-badge&logo=GitHub%20Actions&logoColor=white)  ![image](https://img.shields.io/badge/Terraform-7B42BC?style=for-the-badge&logo=Terraform&logoColor=white)  ![image](https://img.shields.io/badge/SonarQube-4E9BCD?style=for-the-badge&logo=SonarQube&logoColor=white)  ![image](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=Git&logoColor=white)
 
-```
-git clone https://github.com/Yogndrr/MERN-School-Management-System.git
-```
+This repository outlines the end-to-end automation and infrastructure-as-code (IaC) practices used to deploy the School Management System. The architecture follows GitOps principles, ensuring that the state of the Kubernetes cluster matches the configuration stored in Git.
 
-There are three branches in this repository. Each serves a different purpose.
+## 🏗 High-Level Architecture
+The pipeline is divided into two main stages: Continuous Integration (CI) and Continuous Deployment (CD) via GitOps.
 
-`main` contains the work that reflects my current standards. I am rebuilding the project architecture here with updated patterns, cleaner structure, and better practices than the original version.
+ 1. **Code Commit:** Developer pushes code to GitHub.
+ 2. **CI Pipeline (GitHub Actions/Jenkins):**
+      * Static Code Analysis (SonarQube).
 
-`community-version` collects community contributions and external PRs. It stays separate from main while I rebuild the core.
+      * Unit Testing (Jest).
 
-`legacy-version` contains the same code shown in the YouTube tutorial. If you came from the video and want the exact version demonstrated there, switch to this branch after cloning.
-Open a terminal and paste this command to switch to the `legacy-version` branch. But if you want to try the latest one then you can stay in the main branch.
+      * Software Composition Analysis (Trivy).
 
-```
-git checkout legacy-version
-```
+      * Docker Image Build & Push to Docker Hub/ECR.
+3. **Manifest Update:** The CI pipeline updates the Kubernetes manifest repository with the new image tag.
 
-Open two terminals.
+4. **CD Pipeline (ArgoCD):** ArgoCD detects the change in the manifest repo and synchronizes the state to the AKS cluster
 
-Backend setup:
+## 🛠 Tech Stack
+| Category | Tools Used |
+| -------- | ---------- |
+|IaC       |Terraform
+|Backend | Terraform Cloud Platfrom
+| CI/CD Automation | GitHub Actions |
+| GitOps Controller | ArgoCD |
+| Containerization | Docker |
+| Orchestration |AKS|
+|Cloud Provider|Azure
+Static Analysis|SonarQube
+Security Scanning|Trivy
+Artifact Repo	|Docker Hub
 
-```
-cd backend
-npm install
-```
+## 🚀 DevOps Pipeline Details
+1. **Continuous Integration (CI):**
+    The CI workflow is defined in .github/workflows/. Key stages include:
 
-Create a .env file in the backend folder. Add the following:
+    * Compile & Test: Uses Maven to ensure code quality and functional correctness.
 
-```
-MONGO_URL = mongodb://127.0.0.1/smsproject
+    * Security Gate: Scans for vulnerabilities in dependencies and the Dockerfile.
 
-SECRET_KEY = 'secret123key'
-```
+    * Quality Gate: SonarQube analysis to maintain clean code standards.
 
-Fill MONGO_URL using the instructions below. SECRET_KEY is any random string.
+    * Image Build & Push: Generates a lightweight Docker image using multi-stage builds and pushes it to the registry with a unique build ID.
 
-Start the backend:
+2. **Continuous Delivery (GitOps):**
+We use ArgoCD to manage the deployment.
 
-```
-npm start
-```
+    * **Pull Model:** ArgoCD monitors the /k8s_manifest directory in this repo.
 
-Frontend setup:
+    * **Self-Healing:** If someone manually edits a deployment in the cluster, ArgoCD will automatically revert it to match the Git configuration.
 
-```
-cd frontend
-npm install
-```
+    * **Automated Sync:** As soon as the CI pipeline updates the image version in the deployment YAML, ArgoCD triggers a rolling update in the cluster.
 
-Create a .env file in the frontend folder and add:
+## 📦 Kubernetes Resources
+The project includes the following manifests under the k8s_manifest  directory:
 
-```
-REACT_APP_BASE_URL=http://localhost:5000
-```
+  * **deployment.yaml:** Defines the desired state (replicas, image, resources).
 
-If a .env file already exists and the line is commented out, remove the comment.
+  * **service.yaml:** Exposes the application using a LoadBalancer or ClusterIP.
 
-```
-npm start
-```
+  * **ingress.yaml:** (Optional) Handles external routing and SSL termination.
 
-Frontend runs at localhost:3000. Backend runs at localhost:5000.
+  * **configmap.yaml & secrets.yaml:**  Manages environment variables and sensitive database credentials.
 
-# MONGO_URL instructions
+  ## 🔧 Setup & Installation
 
-Use one of these two methods depending on whether you want a local development database or a cloud database.
+ **Prerequisites**
 
-## Option 1 — Local MongoDB
-
-You need two components: the MongoDB server and Compass.
-
-Install MongoDB Community Server from <a href="https://mongodb.com/try/download/community">mongodb.com/try/download/community</a>. This install includes the mongod server. Install Compass from <a href="https://mongodb.com/try/download/compass">mongodb.com/try/download/compass</a>..
-
-Start the MongoDB service. On Windows or macOS the installer usually sets it to run automatically. If it is not running, you can start it manually:
-
-```
-mongod
-```
-
-Open Compass. Connect using:
-
-```
-mongodb://127.0.0.1:27017/yourdbname
-```
-
-Replace yourdbname with any name. Use that full connection string as your MONGO_URL.
-
-## Option 2 — MongoDB Atlas (cloud)
-
-Create an Atlas account at <a href="https://mongodb.com/atlas">mongodb.com/atlas</a> and create a free cluster.
-
-In the cluster page, select:
-
-Database → Connect → Connect your application
-
-Atlas shows you a connection string:
-
-```
-mongodb+srv://<user>:<password>@<cluster-url>/<dbname>?retryWrites=true&w=majority
-```
-
-Replace the placeholders. Use that full string as your MONGO_URL.
-
-Use Atlas if you plan to deploy the project.
-
-# Branch selection
-
-If you are learning from the YouTube video and want the same project the tutorial was based on, use legacy-version.
-
-If you want the original project but also want to apply new changes yourself, stay on legacy-version and modify it as needed.
-
-If you want the updated architecture, use main. This is under active development and contains major improvements.
-
-If you want to contribute, use community-version. All external PRs land there.
-
-# Deployment
-
-There are multiple ways to deploy the project. Use any combination depending on how you prefer to manage the client and server.
-
-## Deploying the backend
-
-### Render
-
-Render works well for Express-based APIs and requires almost no infrastructure setup.
-
-1. Push your code to GitHub.
-2. Create a new Web Service in Render.
-3. Select your backend folder as the root.
-4. Set the build command to:
-
-```
-npm install
-```
-
-5. Set the start command to:
-
-```
-npm start
-```
-
-6. Add the required environment variables from your .env file (MONGO_URL and SECRET_KEY).
-
-Render automatically redeploys on every push.
-
-## Deploying the frontend
-
-### Netlify
-
-Netlify builds and serves the React application.
-
-Steps:
-
-1. Push your frontend folder to GitHub.
-2. Create a new Netlify project.
-3. Set the build command:
-
-```
-npm run build
-```
-
-4. Set the publish directory:
-
-```
-build
-```
-
-5. Add an environment variable if needed for the API endpoint:
-
-```
-REACT_APP_BASE_URL=https://your-backend-url
-```
-
-Netlify auto-builds on every push.
-
-### Vercel
-
-Vercel deploys React-based frontends easily. Same build command. Same publish directory.
-
-## Connecting frontend and backend
-
-After deploying both sides, set the frontend environment variable to point to your backend URL. For example:
-
-```
-REACT_APP_BASE_URL=https://your-backend.onrender.com
-```
-
-Rebuild the frontend when deploying to Netlify or Vercel.
-
-# Notes
-
-The legacy-version branch remains available for anyone who needs the original two-year-old tutorial code. The main branch will continue to evolve as I rebuild the project's architecture using the practices I use today. The community-version branch is available for contributions without affecting the core redesign.
+  * **Git:** For the versioning the code
+  * **azure CLI:** Get azure cloud credentials
+  * **Terraform:** Make Infrastructure 
