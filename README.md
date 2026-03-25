@@ -33,8 +33,7 @@ The School Management System is a web-based application built using the MERN (Mo
 - Database: MongoDB
 
 <br>
-<h1 align="center">♾️ DevOps Implementations with GitOps principle</h1>
-
+<h1 align="center">♾️ Implemented GitOps pipeline using ArgoCD and Kubernetes </h1>
 
 ![image](https://img.shields.io/badge/Microsoft%20Azure-0078D4?style=for-the-badge&logo=Microsoft%20Azure&logoColor=white)  ![image](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=Docker&logoColor=white)  ![image](https://img.shields.io/badge/Kubernetes-326CE5?style=for-the-badge&logo=Kubernetes&logoColor=white)   ![image](https://img.shields.io/badge/Helm-0F1689?style=for-the-badge&logo=Helm&logoColor=white)  ![image](https://img.shields.io/badge/Argo-EF7B4D?style=for-the-badge&logo=Argo&logoColor=white)   ![image](https://img.shields.io/badge/GitHub%20Actions-2088FF?style=for-the-badge&logo=GitHub%20Actions&logoColor=white)  ![image](https://img.shields.io/badge/Terraform-7B42BC?style=for-the-badge&logo=Terraform&logoColor=white)  ![image](https://img.shields.io/badge/SonarQube-4E9BCD?style=for-the-badge&logo=SonarQube&logoColor=white)  ![image](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=Git&logoColor=white)
 
