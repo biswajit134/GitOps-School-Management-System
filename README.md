@@ -40,6 +40,9 @@ The School Management System is a web-based application built using the MERN (Mo
 
 This repository outlines the end-to-end automation and infrastructure-as-code (IaC) practices used to deploy the School Management System. The architecture follows GitOps principles, ensuring that the state of the Kubernetes cluster matches the configuration stored in Git.
 
+## Project Priview
+![image](https://github.com/biswajit134/GitOps-School-Management-System/blob/main/SS/Recording%202026-03-24%20213853+00-00-00.000-00-05-21.133.gif?raw=true)
+
 ## 🏗 High-Level Architecture
 The pipeline is divided into two main stages: Continuous Integration (CI) and Continuous Deployment (CD) via GitOps.
 
