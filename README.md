@@ -43,6 +43,9 @@ This repository outlines the end-to-end automation and infrastructure-as-code (I
 ## 🏗 High-Level Architecture
 The pipeline is divided into two main stages: Continuous Integration (CI) and Continuous Deployment (CD) via GitOps.
 
+![image](https://github.com/biswajit134/GitOps-School-Management-System/blob/main/SS/Screenshot%202026-03-25%20033439.png?raw=true)
+
+
  1. **Code Commit:** Developer pushes code to GitHub.
  2. **CI Pipeline (GitHub Actions/Jenkins):**
       * Static Code Analysis (SonarQube).
