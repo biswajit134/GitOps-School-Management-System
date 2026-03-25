@@ -68,6 +68,7 @@ The pipeline is divided into two main stages: Continuous Integration (CI) and Co
 |IaC       |Terraform
 |Terraform State Management | HashiCorp Cloud Platform
 | CI/CD Automation | GitHub Actions |
+|Kubernetes Package Manager |Helm
 | GitOps Controller | ArgoCD |
 | Containerization | Docker |
 | Orchestration |Kubernetes (K8s)|
