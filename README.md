@@ -112,3 +112,182 @@ The project includes the following manifests under the k8s_manifest  directory:
   * **Git:** For the versioning the code
   * **azure CLI:** Get azure cloud credentials
   * **Terraform:** Make Infrastructure 
+
+## STEPS
+
+ ### 1. Create MongoDB free cluster in mongoDB atlas platfrom and save mongoDB connection string 
+
+ ![image](https://github.com/biswajit134/GitOps-School-Management-System/blob/main/SS/Screenshot%202026-03-24%20214001.png?raw=true)
+
+ ### 2. Create Dockerfile for frontend and backend using multistage docker build
+
+  frontend/Dockerfile :
+   ```
+   FROM node:20-alpine AS base
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+
+FROM node:alpine
+WORKDIR /app
+COPY --from=base /app/node_modules ./node_modules
+COPY . .
+EXPOSE 3000
+CMD [ "npm", "start" ]
+```
+backend/Dockerfile :
+```
+FROM node:20-alpine
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+COPY . .
+EXPOSE 5000
+CMD ["npm", "start"]
+```
+
+### 3. Create .github/workflows/dockerimagebuild.yml make CI part using Github Actions.
+```
+name:  build docker image and push to dockerhub
+on:
+    push:
+        branches:
+            - main
+        paths-ignore:
+            - "README.md"
+            - ".github/**"
+            - "k8s_manifest/**"
+            - "terraform/**"
+            - "argocd/**"
+            - "temp_sms_frontend_manifest/**"
+            - "SS/**"
+    workflow_dispatch:
+        
+        
+jobs:
+    compile:
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout code
+          uses: actions/checkout@v2
+        - run: echo "Checked out code successful"
+
+
+        - name: Set up node js
+          uses: actions/setup-node@v4
+          with:
+            node-version: '20'
+
+        - name: Frontend Compilation (syntax check)
+          run: |
+            cd frontend
+            find . -name "*.js" -exec node --check {} +
+
+        - name: Backend Compilation (syntax check)
+          run: |
+            cd backend
+            find . -name "*.js" -exec node --check {} +
+
+
+
+
+
+    #     # sonarQube analysis
+    # sonarqube:
+    #   needs: compile
+    #   runs-on: ubuntu-latest
+    #   steps:
+    #   - uses: actions/checkout@v4
+    #     with:
+    #       # Disabling shallow clones is recommended for improving the relevancy of reporting
+    #       fetch-depth: 0
+    #   - name: SonarQube Scan
+    #     uses: SonarSource/sonarcloud-github-action@master # Ex: v4.1.0 or sha1, See the latest version at https://github.com/marketplace/actions/official-sonarqube-scan
+    #     env:
+    #       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+    #       GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
+        
+    #     with:
+    #       args: >
+    #         -Dsonar.projectKey=GitOps-School-Management-System
+
+
+    #         -Dsonar.organization=biswajit134
+     
+
+    build:
+        runs-on: ubuntu-latest
+        needs: compile
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v2
+            - run: echo "Checked out code successful"
+
+            - name: Log in to Docker Hub
+              uses: docker/login-action@v1
+              with:
+                username: ${{ secrets.DOCKER_USERNAME }}
+                password: ${{ secrets.DOCKER_PASSWORD }}
+
+
+            - name: docker build images
+              run: |
+                docker build -t biswajit134/sms_frontend:latest ./frontend
+                docker build -t biswajit134/sms_backend:latest ./backend
+                echo "Docker images built successfully"
+              
+            - name: Push images to Docker Hub
+              run: |
+                docker push biswajit134/sms_frontend:latest
+                docker push biswajit134/sms_backend:latest
+                echo "Docker images pushed to Docker Hub successfully"
+    
+
+```
+
+### 4. PUSH CI code into Github and CI Pipeline trigger, run respective jobs
+
+ * Compile
+ * SonarQube Analisys
+ * Docker image Build
+ * Docker image Push on Docker Hub
+
+
+
+
+![image](https://github.com/biswajit134/GitOps-School-Management-System/blob/main/SS/Screenshot%202026-03-24%20152321.png?raw=true)
+
+
+### 5. Use terraform for provision the AKS Cluster
+[terraform](https://github.com/biswajit134/GitOps-School-Management-System/tree/main/terraform)
+
+### 6. Use Terraform Cloud platfrom for terraform backend mantain terraform.tfstate file and also mantain GitOps principle
+
+### 7. Deploy AKS Cluster in Azure 
+<p> Create all resources accorting the terraform file </p>
+
+![image](https://github.com/biswajit134/GitOps-School-Management-System/blob/main/SS/Screenshot%202026-03-24%20144554.png?raw=true)
+
+* Namespaces
+
+![image](https://github.com/biswajit134/GitOps-School-Management-System/blob/main/SS/Screenshot%202026-03-24%20144523.png?raw=true)
+
+* Service 
+
+![image](https://github.com/biswajit134/GitOps-School-Management-System/blob/main/SS/Screenshot%202026-03-24%20144453.png?raw=true)
+
+
+### 8. ArgoCD Deployment
+
+![image](https://github.com/biswajit134/GitOps-School-Management-System/blob/main/SS/Screenshot%202026-03-24%20144023.png?raw=true)
+
+### 9. Project is live at LB URL
+
+* Frontend
+![image](https://github.com/biswajit134/GitOps-School-Management-System/blob/main/SS/Screenshot%202026-03-24%20213944.png?raw=true)
+
+* Backend
+![image](https://github.com/biswajit134/GitOps-School-Management-System/blob/main/SS/Screenshot%202026-03-24%20214023.png?raw=true)
+
+* Database(MongoDB)
+![image](https://github.com/biswajit134/GitOps-School-Management-System/blob/main/SS/Screenshot%202026-03-24%20214001.png?raw=true)
