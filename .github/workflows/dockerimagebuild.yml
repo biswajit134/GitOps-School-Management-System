@@ -4,13 +4,13 @@ on:
         branches:
             - main
         paths-ignore:
-            - README.md
-            - .github/workflows/dockerimagebuild.yml
-            - k8s_manifest
-            - terraform
-            - argocd
-            - temp_sms_frontend_manifest
-            - SS
+            - 'README.md'
+            - '.github/workflows/dockerimagebuild.yml'
+            - 'k8s_manifest'
+            - 'terraform'
+            - 'argocd'
+            - 'temp_sms_frontend_manifest'
+            - 'SS'
     workflow_dispatch:
         
         
