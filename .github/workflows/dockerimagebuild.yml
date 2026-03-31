@@ -52,8 +52,8 @@ jobs:
 
           - name: Run Gitleaks scan
             run: |
-              gitleaks detect --source ./backend --exit-code true
-              gitleaks detect --source ./frontend --exit-code true
+              gitleaks detect --source ./backend --exit-code 1
+              gitleaks detect --source ./frontend --exit-code 1
 
 
 
