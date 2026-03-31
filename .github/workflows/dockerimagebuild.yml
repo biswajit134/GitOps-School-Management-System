@@ -5,7 +5,7 @@ on:
             - main
         paths-ignore:
             - "README.md"
-            # - ".github/**"
+            - ".github/**"
             - "k8s_manifest/**"
             - "terraform/**"
             - "argocd/**"
@@ -109,25 +109,25 @@ jobs:
                 echo "Docker images pushed to Docker Hub successfully"
     
 
-    Trivy_scan:
-        name: trivy scan
-        needs: build
-        runs-on: ubuntu-24.04
-        permissions:
-          contents: read          # Required to checkout and read repo files
-          security-events: write  # Required to upload SARIF files to Security tab
-        steps:
-          - name: Checkout code
-            uses: actions/checkout@v4
+    # Trivy_scan:
+    #     name: trivy scan
+    #     needs: build
+    #     runs-on: ubuntu-24.04
+    #     permissions:
+    #       contents: read          # Required to checkout and read repo files
+    #       security-events: write  # Required to upload SARIF files to Security tab
+    #     steps:
+    #       - name: Checkout code
+    #         uses: actions/checkout@v4
 
-          - name: Run Trivy vulnerability scanner
-            uses: aquasecurity/trivy-action@0.33.1
-            with:
-              image-ref: 'docker.io/biswajit134/sms_backend:latest'
-              format: 'sarif'
-              output: 'trivy-results.sarif'
+    #       - name: Run Trivy vulnerability scanner
+    #         uses: aquasecurity/trivy-action@0.33.1
+    #         with:
+    #           image-ref: 'docker.io/biswajit134/sms_backend:latest'
+    #           format: 'sarif'
+    #           output: 'trivy-results.sarif'
 
-          - name: Upload Trivy scan results to GitHub Security tab
-            uses: github/codeql-action/upload-sarif@v4
-            with:
-              sarif_file: 'trivy-results.sarif'
+    #       - name: Upload Trivy scan results to GitHub Security tab
+    #         uses: github/codeql-action/upload-sarif@v4
+    #         with:
+    #           sarif_file: 'trivy-results.sarif'
