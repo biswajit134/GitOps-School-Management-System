@@ -5,7 +5,7 @@ on:
             - main
         paths-ignore:
             - "README.md"
-            - ".github/**"
+            # - ".github/**"
             - "k8s_manifest/**"
             - "terraform/**"
             - "argocd/**"
@@ -38,7 +38,22 @@ jobs:
             cd backend
             find . -name "*.js" -exec node --check {} +
 
+    scan:
+        name: gitleaks
+        needs: compile
+        runs-on: ubuntu-latest
+        steps:
+          - uses: actions/checkout@v4
+            with:
+              fetch-depth: 0
 
+          - name: Run Gitleaks setup
+            uses: gitleaks/gitleaks-action@v2
+
+          - name: Run Gitleaks scan
+            run: |
+              gitleaks detect --source ./backend --exit-code true
+              gitleaks detect --source ./frontend --exit-code true
 
 
 
