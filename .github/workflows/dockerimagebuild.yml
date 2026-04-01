@@ -126,25 +126,25 @@ jobs:
                 echo "Docker images pushed to Docker Hub successfully"
     
 
-    Trivy_scan:
+    Trivy_image_scan:
         name: trivy scan
         needs: build
         runs-on: ubuntu-24.04
-        permissions:
-          contents: read          # Required to checkout and read repo files
-          security-events: write  # Required to upload SARIF files to Security tab
         steps:
-          - name: Checkout code
-            uses: actions/checkout@v4
-
-          - name: Run Trivy vulnerability scanner
-            uses: aquasecurity/trivy-action@master
+          - name: Run Trivy frontend vulnerability scanner
+            uses: aquasecurity/trivy-action@v0.35.0  # Patched and safe version
             with:
-              image-ref: 'docker.io/biswajit134/sms_backend:latest'
-              format: 'sarif'
-              output: 'trivy-results.sarif'
+              image-ref: 'biswajit134/sms_frontend:latest'
+              format: 'table'
+              exit-code: '1'
+              ignore-unfixed: true
+              severity: 'CRITICAL,HIGH'
 
-          - name: Upload Trivy scan results to GitHub Security tab
-            uses: github/codeql-action/upload-sarif@v4
+          - name: Run Trivy backend vulnerability scanner
+            uses: aquasecurity/trivy-action@v0.35.0  # Patched and safe version
             with:
-              sarif_file: 'trivy-results.sarif'
+              image-ref: 'biswajit134/sms_backend:latest'
+              format: 'table'
+              exit-code: '1'
+              ignore-unfixed: true
+              severity: 'CRITICAL,HIGH'
