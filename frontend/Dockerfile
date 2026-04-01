@@ -66,7 +66,7 @@ RUN adduser --system --uid 1001 nodeapp
 # 2. Security: Copy only necessary artifacts from builder
 COPY --from=builder /app/package.json ./package.json
 COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder --chown=nodeapp:nodejs /app/dist ./dist
+COPY --from=builder --chown=nodeapp:nodejs /app/build ./build
 
 # Set proper ownership
 RUN chown -R nodeapp:nodejs /app
