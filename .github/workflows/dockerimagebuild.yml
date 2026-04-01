@@ -63,10 +63,37 @@ jobs:
 
 #=================================================================================================    
 # ./backend Setup
-#=================================================================================================     
+#=================================================================================================
+
+    owasp_depcheck_backend:
+      runs-on: ubuntu-latest
+      name: depecheck_test
+      steps:
+        - name: Checkout
+          uses: actions/checkout@v2
+        - name: Build project with Maven
+          run: mvn clean install
+        - name: Depcheck
+          uses: dependency-check/Dependency-Check_Action@main
+          id: Depcheck
+          with:
+            project: 'test'
+            path: './backend'
+            format: 'HTML'
+            out: 'reports' # this is the default, no need to specify unless you wish to override it
+            args: >
+              --failOnCVSS 7
+              --enableRetired
+        - name: Upload Test results
+          uses: actions/upload-artifact@master
+          with:
+            name: Depcheck report
+            path: ${{github.workspace}}/reports
+
+
     trivy_backend_fs_scan:
         name: trivy backend fs scan
-        needs: gitleaks_scan
+        needs: owasp_depcheck_backend
         runs-on: ubuntu-24.04
         steps:
           - name: Checkout code
@@ -172,7 +199,7 @@ jobs:
               vuln-type: 'os,library'
               severity: 'CRITICAL,HIGH'
 
-
+# SAST Scan using SonarQube for frontend
     sonarqube_frontend_scan:
       name: SonarQube frontend Scan
       runs-on: ubuntu-latest
