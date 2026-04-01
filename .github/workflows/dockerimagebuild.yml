@@ -1,3 +1,5 @@
+# projectBaseDir: ./  # Set the base directory for the project (optional, defaults to the root of the repository)
+
 name:  build docker image and push to dockerhub
 on:
     push:
@@ -131,13 +133,14 @@ jobs:
         needs: build
         runs-on: ubuntu-24.04
         steps:
-          - name: Run Trivy frontend vulnerability scanner
-            uses: aquasecurity/trivy-action@v0.35.0  # Patched and safe version
+          - name: Run Trivy vulnerability scanner
+            uses: aquasecurity/trivy-action@0.35.0
             with:
-              image-ref: 'biswajit134/sms_frontend:latest'
+              image-ref: 'docker.io/biswajit134/sms_frontend:latest'
               format: 'table'
               exit-code: '1'
               ignore-unfixed: true
+              vuln-type: 'os,library'
               severity: 'CRITICAL,HIGH'
 
     Trivy_backend_image_scan:
@@ -145,11 +148,12 @@ jobs:
         needs: Trivy_frontend_image_scan
         runs-on: ubuntu-24.04
         steps:
-          - name: Run Trivy backend vulnerability scanner
-            uses: aquasecurity/trivy-action@v0.35.0  # Patched and safe version
+          - name: Run Trivy vulnerability scanner
+            uses: aquasecurity/trivy-action@0.35.0
             with:
-              image-ref: 'biswajit134/sms_backend:latest'
+              image-ref: 'docker.io/biswajit134/sms_backend:latest'
               format: 'table'
               exit-code: '1'
               ignore-unfixed: true
+              vuln-type: 'os,library'
               severity: 'CRITICAL,HIGH'
