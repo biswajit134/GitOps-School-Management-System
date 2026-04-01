@@ -71,6 +71,8 @@ jobs:
           fetch-depth: 0
       - name: SonarQube Scan
         uses: sonarsource/sonarcloud-github-action@v5.0.0 # Ex: v4.0.0, See the latest version at https://github.com/marketplace/actions/sonarcloud-scan
+        with:
+          projectBaseDir: './backend' # Set the base directory for the project (optional, defaults to the root of the repository)
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
