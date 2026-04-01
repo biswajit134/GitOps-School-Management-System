@@ -77,27 +77,6 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
 
-    #     # sonarQube analysis
-    # sonarqube:
-    #   needs: compile
-    #   runs-on: ubuntu-latest
-    #   steps:
-    #   - uses: actions/checkout@v4
-    #     with:
-    #       # Disabling shallow clones is recommended for improving the relevancy of reporting
-    #       fetch-depth: 0
-    #   - name: SonarQube Scan
-    #     uses: SonarSource/sonarcloud-github-action@master # Ex: v4.1.0 or sha1, See the latest version at https://github.com/marketplace/actions/official-sonarqube-scan
-    #     env:
-    #       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-    #       GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
-        
-    #     with:
-    #       args: >
-    #         -Dsonar.projectKey=GitOps-School-Management-System
-
-
-    #         -Dsonar.organization=biswajit134
      
     trivy_fs_scan:
         name: trivy fs scan
@@ -120,7 +99,9 @@ jobs:
     build:
         name: Docker Build
         runs-on: ubuntu-latest
-        needs: trivy_fs_scan
+        needs: 
+            - sonarqube
+            - trivy_fs_scan
         steps:
             - name: Checkout code
               uses: actions/checkout@v2
