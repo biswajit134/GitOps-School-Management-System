@@ -77,4 +77,4 @@ USER nodeapp
 EXPOSE 3000
 
 # 3. Security: Use 'node' directly to handle signals correctly
-CMD ["node", "dist/index.js"]
+CMD ["node", "build/index.js"]
