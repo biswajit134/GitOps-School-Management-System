@@ -126,8 +126,8 @@ jobs:
                 echo "Docker images pushed to Docker Hub successfully"
     
 
-    Trivy_image_scan:
-        name: trivy scan
+    Trivy_frontend_image_scan:
+        name: Trivy_frontend_image_scan
         needs: build
         runs-on: ubuntu-24.04
         steps:
@@ -140,6 +140,11 @@ jobs:
               ignore-unfixed: true
               severity: 'CRITICAL,HIGH'
 
+    Trivy_backend_image_scan:
+        name: Trivy_backend_image_scan
+        needs: Trivy_frontend_image_scan
+        runs-on: ubuntu-24.04
+        steps:
           - name: Run Trivy backend vulnerability scanner
             uses: aquasecurity/trivy-action@v0.35.0  # Patched and safe version
             with:
