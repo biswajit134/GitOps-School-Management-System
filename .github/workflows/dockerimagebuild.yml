@@ -147,32 +147,34 @@ jobs:
                 echo "Docker images pushed to Docker Hub successfully"
     
 
-    # Trivy_frontend_image_scan:
-    #     name: Trivy_frontend_image_scan
-    #     needs: build
-    #     runs-on: ubuntu-24.04
-    #     steps:
-    #       - name: Run Trivy vulnerability scanner
-    #         uses: aquasecurity/trivy-action@0.35.0
-    #         with:
-    #           image-ref: 'docker.io/biswajit134/sms_frontend:latest'
-    #           format: 'table'
-    #           exit-code: '1'
-    #           ignore-unfixed: true
-    #           vuln-type: 'os,library'
-    #           severity: 'CRITICAL,HIGH'
+    Trivy_frontend_image_scan:
+        name: Trivy_frontend_image_scan
+        needs: build
+        runs-on: ubuntu-24.04
+        steps:
+          - name: Run Trivy vulnerability scanner
+            uses: aquasecurity/trivy-action@0.35.0
+            with:
+              scan-type: image   # Specify that we want to scan a container image
+              image-ref: 'docker.io/biswajit134/sms_frontend:latest'
+              format: 'table'
+              exit-code: '0' # Set exit code to 0 to prevent the action from failing on vulnerabilities (optional, adjust as needed)
+              ignore-unfixed: true
+              vuln-type: 'os,library'
+              severity: 'CRITICAL,HIGH'
 
-    # Trivy_backend_image_scan:
-    #     name: Trivy_backend_image_scan
-    #     needs: Trivy_frontend_image_scan
-    #     runs-on: ubuntu-24.04
-    #     steps:
-    #       - name: Run Trivy vulnerability scanner
-    #         uses: aquasecurity/trivy-action@0.35.0
-    #         with:
-    #           image-ref: 'docker.io/biswajit134/sms_backend:latest'
-    #           format: 'table'
-    #           exit-code: '1'
-    #           ignore-unfixed: true
-    #           vuln-type: 'os,library'
-    #           severity: 'CRITICAL,HIGH'
+    Trivy_backend_image_scan:
+        name: Trivy_backend_image_scan
+        needs: Trivy_frontend_image_scan
+        runs-on: ubuntu-24.04
+        steps:
+          - name: Run Trivy vulnerability scanner
+            uses: aquasecurity/trivy-action@0.35.0
+            with:
+              scan-type: image   # Specify that we want to scan a container image
+              image-ref: 'docker.io/biswajit134/sms_backend:latest'
+              format: 'table'
+              exit-code: '0'
+              ignore-unfixed: true
+              vuln-type: 'os,library'
+              severity: 'CRITICAL,HIGH'
