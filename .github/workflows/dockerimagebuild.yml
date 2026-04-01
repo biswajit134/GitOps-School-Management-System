@@ -94,6 +94,12 @@ jobs:
         uses: sonarsource/sonarcloud-github-action@v5.0.0 # Ex: v4.0.0, See the latest version at https://github.com/marketplace/actions/sonarcloud-scan
         with:
           projectBaseDir: './backend' # Set the base directory for the project (optional, defaults to the root of the repository)
+          args: >
+            -Dsonar.organization=biswajit-devsecops
+            -Dsonar.projectKey=biswajit-devsecops_gitops-school-management-system
+            -Dsonar.projectName=GitOps-School-Management-System
+            -Dsonar.sources=.
+            -Dsonar.sourceEncoding=UTF-8
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
@@ -101,6 +107,12 @@ jobs:
         uses: sonarsource/sonarcloud-github-action@v5.0.0 # Ex: v4.0.0, See the latest version at https://github.com/marketplace/actions/sonarcloud-scan
         with:
           projectBaseDir: './frontend' # Set the base directory for the project (optional, defaults to the root of the repository)
+          args: >
+            -Dsonar.organization=biswajit-devsecops
+            -Dsonar.projectKey=biswajit-devsecops_gitops-school-management-system
+            -Dsonar.projectName=GitOps-School-Management-System
+            -Dsonar.sources=.
+            -Dsonar.sourceEncoding=UTF-8
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
