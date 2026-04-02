@@ -85,7 +85,7 @@ jobs:
               cd backend
               npm install
               npm fund
-              npm audit --json | > npm_audit_report.json
+              npm audit --json > cat npm_audit_report.json
 
           - name: Upload npm audit report
             uses: actions/upload-artifact@v7
