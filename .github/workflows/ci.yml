@@ -84,10 +84,11 @@ jobs:
             run: |
               cd backend
               npm install
-              npm fund
-              npm audit --json | cat npm_audit_report.json
+              # Redirect output to root directory for easy upload
+              npm audit --json > ../npm_audit_report.json || true
 
           - name: Upload npm audit report
+            if: always()  # Ensure this step runs even if the previous step fails
             uses: actions/upload-artifact@v7
             with:
               name: npm-audit-report
