@@ -1,6 +1,6 @@
 # projectBaseDir: ./  # Set the base directory for the project (optional, defaults to the root of the repository)
 
-name:  build docker image and push to dockerhub
+name:  DevSecOps CI Pipeline
 on:
     push:
         branches:
