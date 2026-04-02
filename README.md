@@ -429,7 +429,13 @@ graph TD;
   build_push_frontend_image --> Trivy_frontend_image_scan;
 ```  
 
-
+```mermaid
+graph TD;
+    A-->B;
+    A-->C;
+    B-->D;
+    C-->D;
+```
 
 
 ![image](https://github.com/biswajit134/GitOps-School-Management-System/blob/main/SS/Screenshot%202026-04-02%20004107.png?raw=true)
