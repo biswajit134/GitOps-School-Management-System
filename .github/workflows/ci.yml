@@ -7,7 +7,7 @@ on:
             - main
         paths-ignore:
             - "README.md"
-            - ".github/**"
+            # - ".github/**"
             - "k8s_manifest/**"
             - "terraform/**"
             - "argocd/**"
@@ -299,3 +299,10 @@ jobs:
               ignore-unfixed: true
               vuln-type: 'os,library'
               severity: 'CRITICAL,HIGH'
+
+
+# on:
+#   workflow_run:
+#     workflows: ["Terraform CI/CD"] # Name of the infra pipeline
+#     types:
+#       - completed
