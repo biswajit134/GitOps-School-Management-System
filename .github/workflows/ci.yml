@@ -84,6 +84,9 @@ jobs:
             run: |
               cd backend
               npm install
+              npm fund
+              npm audit fix
+              npm audit fix --force
               npm audit --json | tee npm_audit_report.json
 
           - name: Upload npm audit report
