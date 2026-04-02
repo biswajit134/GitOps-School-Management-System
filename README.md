@@ -151,6 +151,8 @@ CMD ["npm", "start"]
 ```
 
 ### 3. Create .github/workflows/ci.yml make CI pipeline part using Github Actions.
+![image](https://github.com/biswajit134/GitOps-School-Management-System/blob/main/SS/Screenshot%202026-04-02%20004107.png?raw=true)
+
 ```
 # projectBaseDir: ./  # Set the base directory for the project (optional, defaults to the root of the repository)
 
