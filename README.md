@@ -421,10 +421,11 @@ graph TD;
   compile --> gitleaks;
   gitleaks --> trivy_backend_fs_scan;
   gitleaks --> trivy_frontend_fs_scan;
-  trivy backend fs scan --> sonarqube_backend_scan;
-  trivy frontend fs scan --> sonarqube_frontend_scan;
-  sonarqube backend scan --> build_push_backend_image;
-  sonarqube frontend scan --> build_push_frontend_image;
+  trivy_backend_fs_scan --> sonarqube_backend_scan;
+  trivy_frontend_scan --> sonarqube_backend_scan;
+  trivy_frontend_fs_scan --> sonarqube_frontend_scan;
+  sonarqube_backend_scan --> build_push_backend_image;
+  sonarqube_frontend_scan --> build_push_frontend_image;
   build_push_backend_image --> Trivy_backend_image_scan;
   build_push_frontend_image --> Trivy_frontend_image_scan;
 ```  
