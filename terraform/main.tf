@@ -18,9 +18,23 @@ terraform {
       source  = "gavinbunney/kubectl"
       version = "1.19.0"
     }
+
+    
   }
+
+  cloud { 
+    
+    organization = "DevSecOps-sms" 
+
+    workspaces { 
+      name = "AzureLabs" 
+    } 
+  } 
     
 }
+
+
+
 
 
 
