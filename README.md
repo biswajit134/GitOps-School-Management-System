@@ -409,11 +409,6 @@ jobs:
 
 ### 4. PUSH CI code into Github and CI Pipeline trigger, run respective jobs
 
- * Compile
- * SonarQube Analisys
- * Docker image Build
- * Docker image Push on Docker Hub
-
 ```mermaid
 graph TD;
   code --> main;
