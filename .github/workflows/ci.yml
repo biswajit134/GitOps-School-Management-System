@@ -5,14 +5,18 @@ on:
     push:
         branches:
             - main
-        paths-ignore:
-            - "README.md"
+        # paths-ignore:
+        #     - "README.md"
+        #     # - ".github/**"
+        #     - "k8s_manifest/**"
+        #     - "terraform/**"
+        #     - "argocd/**"
+        #     - "temp_sms_frontend_manifest/**"
+        #     - "SS/**"
+        paths:
+            - "backend/**"
+            - "frontend/**"
             # - ".github/**"
-            - "k8s_manifest/**"
-            - "terraform/**"
-            - "argocd/**"
-            - "temp_sms_frontend_manifest/**"
-            - "SS/**"
 
     pull_request:
         branches:
