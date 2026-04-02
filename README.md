@@ -150,8 +150,10 @@ EXPOSE 5000
 CMD ["npm", "start"]
 ```
 
-### 3. Create .github/workflows/dockerimagebuild.yml make CI part using Github Actions.
+### 3. Create .github/workflows/ci.yml make CI pipeline part using Github Actions.
 ```
+# projectBaseDir: ./  # Set the base directory for the project (optional, defaults to the root of the repository)
+
 name:  build docker image and push to dockerhub
 on:
     push:
@@ -165,6 +167,10 @@ on:
             - "argocd/**"
             - "temp_sms_frontend_manifest/**"
             - "SS/**"
+
+    pull_request:
+        branches:
+            - main
     workflow_dispatch:
         
         
@@ -195,33 +201,166 @@ jobs:
 
 
 
-
-    #     # sonarQube analysis
-    # sonarqube:
-    #   needs: compile
-    #   runs-on: ubuntu-latest
-    #   steps:
-    #   - uses: actions/checkout@v4
-    #     with:
-    #       # Disabling shallow clones is recommended for improving the relevancy of reporting
-    #       fetch-depth: 0
-    #   - name: SonarQube Scan
-    #     uses: SonarSource/sonarcloud-github-action@master # Ex: v4.1.0 or sha1, See the latest version at https://github.com/marketplace/actions/official-sonarqube-scan
-    #     env:
-    #       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-    #       GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
-        
-    #     with:
-    #       args: >
-    #         -Dsonar.projectKey=GitOps-School-Management-System
-
-
-    #         -Dsonar.organization=biswajit134
-     
-
-    build:
-        runs-on: ubuntu-latest
+    gitleaks_scan:
+        name: gitleaks
         needs: compile
+        runs-on: ubuntu-latest
+        steps:
+          - uses: actions/checkout@v4
+            with:
+              fetch-depth: 0
+
+          - name: Run Gitleaks setup
+            uses: gitleaks/gitleaks-action@v2
+
+          - name: Run Gitleaks scan
+            run: |
+              gitleaks detect --source ./backend --exit-code 0 
+              gitleaks detect --source ./frontend --exit-code 0
+
+#=================================================================================================    
+# ./backend Setup
+#=================================================================================================
+
+
+
+    trivy_backend_fs_scan:
+        name: trivy backend fs scan
+        needs: gitleaks_scan
+        runs-on: ubuntu-24.04
+        steps:
+          - name: Checkout code
+            uses: actions/checkout@v4
+
+          - name: Run Trivy filesystem vulnerability scanner
+            uses: aquasecurity/trivy-action@master
+            with:
+              scan-type: 'fs'
+              scan-ref: './backend'
+              format: 'table'
+              ignore-unfixed: true
+              vuln-type: 'os,library'
+              severity: 'CRITICAL,HIGH'
+
+    sonarqube_backend_scan:
+      name: SonarQube backend Scan
+      runs-on: ubuntu-latest
+      needs: trivy_backend_fs_scan
+      steps:
+      - uses: actions/checkout@v4
+        with:
+          # Disabling shallow clones is recommended for improving the relevancy of reporting
+          fetch-depth: 0
+      - name: SonarQube backend Scan
+        uses: sonarsource/sonarcloud-github-action@v5.0.0 # Ex: v4.0.0, See the latest version at https://github.com/marketplace/actions/sonarcloud-scan
+        with:
+          projectBaseDir: './backend' # Set the base directory for the project (optional, defaults to the root of the repository)
+          args: >
+            -Dsonar.organization=biswajit-devsecops
+            -Dsonar.projectKey=biswajit-devsecops_gitops-school-management-system
+            -Dsonar.projectName=GitOps-School-Management-System
+            -Dsonar.sources=.
+            -Dsonar.sourceEncoding=UTF-8
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+    build_push_backend_image:
+        name: build_push_backend_image
+        runs-on: ubuntu-latest
+        needs: 
+            - sonarqube_backend_scan
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v2
+            - run: echo "Checked out code successful"
+
+            - name: Log in to Docker Hub
+              uses: docker/login-action@v1
+              with:
+                username: ${{ secrets.DOCKER_USERNAME }}
+                password: ${{ secrets.DOCKER_PASSWORD }}
+
+
+            - name: docker build images
+              run: |
+                docker build -t biswajit134/sms_backend:latest ./backend
+                echo "Docker images built successfully"
+
+            - name: Push images to Docker Hub
+              run: |
+                docker push biswajit134/sms_backend:latest
+                echo "Docker images pushed to Docker Hub successfully"
+
+
+
+    Trivy_backend_image_scan:
+        name: Trivy_backend_image_scan
+        needs: build_push_backend_image
+        runs-on: ubuntu-24.04
+        steps:
+          - name: Run Trivy vulnerability scanner
+            uses: aquasecurity/trivy-action@0.35.0
+            with:
+              scan-type: image   # Specify that we want to scan a container image
+              image-ref: 'docker.io/biswajit134/sms_backend:latest'
+              format: 'table'
+              exit-code: '0'
+              ignore-unfixed: true
+              vuln-type: 'os,library'
+              severity: 'CRITICAL,HIGH'
+
+
+#=================================================================================================
+# ./frontend Setup
+#=================================================================================================
+
+    trivy_frontend_fs_scan:
+        name: trivy frontend fs scan
+        needs: gitleaks_scan
+        runs-on: ubuntu-24.04
+        steps:
+          - name: Checkout code
+            uses: actions/checkout@v4
+
+          - name: Run Trivy filesystem vulnerability scanner
+            uses: aquasecurity/trivy-action@master
+            with:
+              scan-type: 'fs'
+              scan-ref: './frontend'
+              format: 'table'
+              ignore-unfixed: true
+              vuln-type: 'os,library'
+              severity: 'CRITICAL,HIGH'
+
+# SAST Scan using SonarQube for frontend
+    sonarqube_frontend_scan:
+      name: SonarQube frontend Scan
+      runs-on: ubuntu-latest
+      needs: trivy_frontend_fs_scan
+      steps:
+      - uses: actions/checkout@v4
+        with:
+          # Disabling shallow clones is recommended for improving the relevancy of reporting
+          fetch-depth: 0
+      - name: SonarQube frontend Scan
+        uses: sonarsource/sonarcloud-github-action@v5.0.0 # Ex: v4.0.0, See the latest version at https://github.com/marketplace/actions/sonarcloud-scan
+        with:
+          projectBaseDir: './frontend' # Set the base directory for the project (optional, defaults to the root of the repository)
+          args: >
+            -Dsonar.organization=biswajit-devsecops
+            -Dsonar.projectKey=biswajit-devsecops_gitops-school-management-system
+            -Dsonar.projectName=GitOps-School-Management-System
+            -Dsonar.sources=.
+            -Dsonar.sourceEncoding=UTF-8
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+
+    build_push_frontend_image:
+        name: build_push_frontend_image
+        runs-on: ubuntu-latest
+        needs: 
+            - sonarqube_frontend_scan
         steps:
             - name: Checkout code
               uses: actions/checkout@v2
@@ -237,14 +376,32 @@ jobs:
             - name: docker build images
               run: |
                 docker build -t biswajit134/sms_frontend:latest ./frontend
-                docker build -t biswajit134/sms_backend:latest ./backend
                 echo "Docker images built successfully"
-              
+
             - name: Push images to Docker Hub
               run: |
                 docker push biswajit134/sms_frontend:latest
-                docker push biswajit134/sms_backend:latest
                 echo "Docker images pushed to Docker Hub successfully"
+
+
+    
+
+    Trivy_frontend_image_scan:
+        name: Trivy_frontend_image_scan
+        needs: build_push_frontend_image
+        runs-on: ubuntu-24.04
+        steps:
+          - name: Run Trivy vulnerability scanner
+            uses: aquasecurity/trivy-action@0.35.0
+            with:
+              scan-type: image   # Specify that we want to scan a container image
+              image-ref: 'docker.io/biswajit134/sms_frontend:latest'
+              format: 'table'
+              exit-code: '0' # Set exit code to 0 to prevent the action from failing on vulnerabilities (optional, adjust as needed)
+              ignore-unfixed: true
+              vuln-type: 'os,library'
+              severity: 'CRITICAL,HIGH'
+
     
 
 ```
