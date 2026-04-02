@@ -21,15 +21,6 @@ terraform {
 
     
   }
-
-  cloud { 
-    
-    organization = "DevSecOps-sms" 
-
-    workspaces { 
-      name = "AzureLabs" 
-    } 
-  } 
     
 }
 
