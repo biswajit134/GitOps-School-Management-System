@@ -71,6 +71,7 @@ provider "azurerm" {
     # client_secret = var.client_secret
     # tenant_id = var.tenant_id
   features {}
+  skip_provider_registration = true
 }
 
 module "aks-cluster" {
