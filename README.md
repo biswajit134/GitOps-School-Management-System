@@ -422,21 +422,12 @@ graph TD;
   gitleaks --> trivy_backend_fs_scan;
   gitleaks --> trivy_frontend_fs_scan;
   trivy_backend_fs_scan --> sonarqube_backend_scan;
-  trivy_frontend_scan --> sonarqube_backend_scan;
   trivy_frontend_fs_scan --> sonarqube_frontend_scan;
   sonarqube_backend_scan --> build_push_backend_image;
   sonarqube_frontend_scan --> build_push_frontend_image;
   build_push_backend_image --> Trivy_backend_image_scan;
   build_push_frontend_image --> Trivy_frontend_image_scan;
 ```  
-
-```mermaid
-graph TD;
-    A-->B;
-    A-->C;
-    B-->D;
-    C-->D;
-```
 
 
 ![image](https://github.com/biswajit134/GitOps-School-Management-System/blob/main/SS/Screenshot%202026-04-02%20004107.png?raw=true)
