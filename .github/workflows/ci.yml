@@ -69,7 +69,7 @@ jobs:
 #=================================================================================================
 
     oast_npm_backend_scan:
-        name: oast npm backend scan
+        name: oast_npm_backend_scan
         needs: gitleaks_scan
         runs-on: ubuntu-latest
         steps:
@@ -91,7 +91,7 @@ jobs:
             if: always()  # Ensure this step runs even if the previous step fails
             uses: actions/upload-artifact@v7
             with:
-              name: npm-audit-report
+              name: npm-backend-audit-report
               path: npm_audit_report.json
 
 
@@ -185,10 +185,36 @@ jobs:
 #=================================================================================================
 # ./frontend Setup
 #=================================================================================================
+    oast_npm_frontend_scan:
+        name: oast_npm_frontend_scan
+        needs: gitleaks_scan
+        runs-on: ubuntu-latest
+        steps:
+          - name: Checkout code
+            uses: actions/checkout@v4
+
+          - name: Set up node js
+            uses: actions/setup-node@v4
+            with:
+              node-version: '20'
+          - name: Run oast npm scan
+            run: |
+              cd frontend
+              npm install
+              # Redirect output to root directory for easy upload
+              npm audit --json > ../npm_audit_report.json || true
+
+          - name: Upload npm audit report
+            if: always()  # Ensure this step runs even if the previous step fails
+            uses: actions/upload-artifact@v7
+            with:
+              name: npm-frontend-audit-report
+              path: npm_audit_report.json
+
 
     trivy_frontend_fs_scan:
-        name: trivy frontend fs scan
-        needs: gitleaks_scan
+        name: trivy_frontend_fs_scan
+        needs: oast_npm_frontend_scan
         runs-on: ubuntu-24.04
         steps:
           - name: Checkout code
@@ -206,7 +232,7 @@ jobs:
 
 # SAST Scan using SonarQube for frontend
     sonarqube_frontend_scan:
-      name: SonarQube frontend Scan
+      name: SonarQube_frontend_Scan
       runs-on: ubuntu-latest
       needs: trivy_frontend_fs_scan
       steps:
