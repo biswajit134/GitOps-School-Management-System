@@ -31,6 +31,7 @@ jobs:
           terraform init
 
       - name: Terraform plan
+        working-directory: ./terraform
         id: plan
         if: github.event_name == 'push'  # Only run plan on push events, not on workflow_dispatch
         run: terraform plan -no-color
@@ -38,10 +39,12 @@ jobs:
         
 
       - name: Terraform plan State
+        working-directory: ./terraform
         if: steps.plan.outcome == 'failure'  # Only run this step if the plan step failed
         run: exit 1  # Exit with a non-zero code to indicate failure
 
       - name: Terraform apply
+        working-directory: ./terraform
         id: apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push' && steps.plan.outcome == 'success'  # Only run apply on push events to main branch and if plan was successful
         run: terraform apply -auto-approve
