@@ -151,7 +151,6 @@ CMD ["npm", "start"]
 ```
 
 ### 3. Create .github/workflows/ci.yml make CI pipeline part using Github Actions.
-![image](https://github.com/biswajit134/GitOps-School-Management-System/blob/main/SS/Screenshot%202026-04-02%20004107.png?raw=true)
 
 ```
 # projectBaseDir: ./  # Set the base directory for the project (optional, defaults to the root of the repository)
@@ -415,10 +414,25 @@ jobs:
  * Docker image Build
  * Docker image Push on Docker Hub
 
+```mermaid
+graph TD;
+  code --> main;
+  main --> compile;
+  compile --> gitleaks;
+  gitleaks --> trivy backend fs scan;
+  gitleaks --> trivy frontend fs scan;
+  trivy backend fs scan --> sonarqube backend scan;
+  trivy frontend fs scan --> sonarqube frontend scan;
+  sonarqube backend scan --> build_push_backend_image;
+  sonarqube frontend scan --> build_push_frontend_image;
+  build_push_backend_image --> Trivy_backend_image_scan;
+  build_push_frontend_image --> Trivy_frontend_image_scan;
+```  
 
 
 
-![image](https://github.com/biswajit134/GitOps-School-Management-System/blob/main/SS/Screenshot%202026-03-24%20152321.png?raw=true)
+
+![image](https://github.com/biswajit134/GitOps-School-Management-System/blob/main/SS/Screenshot%202026-04-02%20004107.png?raw=true)
 
 
 ### 5. Use terraform for provision the AKS Cluster
