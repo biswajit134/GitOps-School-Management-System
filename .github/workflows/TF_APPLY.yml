@@ -24,12 +24,14 @@ jobs:
       
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v1
-        with:
+        with:  
           cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
       - name: Terraform Init
         id: init
-        run: terraform init
+        run: |
+          pwd
+          terraform init
 
       - name: Terraform plan
         id: plan
