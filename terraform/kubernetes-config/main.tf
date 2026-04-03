@@ -17,6 +17,20 @@ terraform {
   }
 }
 
+data "azurerm_kubernetes_cluster" "default" {
+  depends_on          = [module.aks-cluster] # refresh cluster state before reading
+  name                = var.cluster_name
+  resource_group_name = var.cluster_name
+}
+
+provider "kubectl" {
+  host                   = data.azurerm_kubernetes_cluster.default.kube_config.0.host
+  client_certificate     = base64decode(data.azurerm_kubernetes_cluster.default.kube_config.0.client_certificate)
+  client_key             = base64decode(data.azurerm_kubernetes_cluster.default.kube_config.0.client_key)
+  cluster_ca_certificate = base64decode(data.azurerm_kubernetes_cluster.default.kube_config.0.cluster_ca_certificate)
+
+}
+
 
 # Kubernetes configaration 
 resource "kubernetes_namespace_v1" "argocd" {
