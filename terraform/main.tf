@@ -21,6 +21,15 @@ terraform {
 
     
   }
+
+  cloud { 
+    
+    organization = "Biswajit_Hazra" 
+
+    workspaces { 
+      name = "GitOps-School-Management-System" 
+    } 
+  } 
     
 }
 
