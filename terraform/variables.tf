@@ -46,23 +46,23 @@ variable "frontend_manifestfile_path" {
   type = string
 }
  
-# variable "subscription_id" {
-#   type = string
+variable "ARM_SUBSCRIPTION_ID" {
+  type = string
   
-# }
+}
 
-# variable "client_id" {
-#   type = string
+variable "ARM_CLIENT_ID" {
+  type = string
   
-# }
+}
 
-# variable "client_secret" {
-#   type = string
+variable "ARM_CLIENT_SECRET" {
+  type = string
   
-# }
+}
 
-# variable "tenant_id" {
-#   type = string
+variable "ARM_TENANT_ID" {
+  type = string
   
-# }
+}
 
