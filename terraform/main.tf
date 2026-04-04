@@ -1,108 +1,44 @@
-
-terraform {
-  required_providers {
-    kubernetes = {
-      source  = "hashicorp/kubernetes"
-      version = "3.0.1"
-    }
-    azurerm = {
-      source  = "hashicorp/azurerm"
-      version = "4.67.0"
-    }
-    helm = {
-      source  = "hashicorp/helm"
-      version = ">= 2.1.0"
-    }
-
-     kubectl = {
-      source  = "gavinbunney/kubectl"
-      version = "1.19.0"
-    }
-
-    
-  }
-
-  cloud { 
-    
-    organization = "Biswajit_Hazra" 
-
-    workspaces { 
-      name = "GitOps-School-Management-System" 
-    } 
-  } 
-    
-}
-
-
-
-
-
-
-data "azurerm_kubernetes_cluster" "default" {
-  depends_on          = [module.aks-cluster] # refresh cluster state before reading
-  name                = var.cluster_name
-  resource_group_name = var.cluster_name
-}
-
-
-
-provider "kubernetes" {
-  host                   = data.azurerm_kubernetes_cluster.default.kube_config.0.host
-  client_certificate     = base64decode(data.azurerm_kubernetes_cluster.default.kube_config.0.client_certificate)
-  client_key             = base64decode(data.azurerm_kubernetes_cluster.default.kube_config.0.client_key)
-  cluster_ca_certificate = base64decode(data.azurerm_kubernetes_cluster.default.kube_config.0.cluster_ca_certificate)
-
-}
-
-provider "helm" {
-  kubernetes = {
-    host                   = data.azurerm_kubernetes_cluster.default.kube_config.0.host
-    client_certificate     = base64decode(data.azurerm_kubernetes_cluster.default.kube_config.0.client_certificate)
-    client_key             = base64decode(data.azurerm_kubernetes_cluster.default.kube_config.0.client_key)
-    cluster_ca_certificate = base64decode(data.azurerm_kubernetes_cluster.default.kube_config.0.cluster_ca_certificate)
-  }
-}
-
-
-provider "kubectl" {
-  host                   = data.azurerm_kubernetes_cluster.default.kube_config.0.host
-  client_certificate     = base64decode(data.azurerm_kubernetes_cluster.default.kube_config.0.client_certificate)
-  client_key             = base64decode(data.azurerm_kubernetes_cluster.default.kube_config.0.client_key)
-  cluster_ca_certificate = base64decode(data.azurerm_kubernetes_cluster.default.kube_config.0.cluster_ca_certificate)
-
-}
-
-
-
-provider "azurerm" {
-    # subscription_id = var.ARM_SUBSCRIPTION_ID
-    # client_id = var.ARM_CLIENT_ID
-    # client_secret = var.ARM_CLIENT_SECRET
-    # tenant_id = var.ARM_TENANT_ID
-
-  features {}
-}
-
 module "aks-cluster" {
-  source       = "./aks-cluster"
-  cluster_name = var.cluster_name
-  location     = var.location
-  node_count   = var.node_count
-  vm_size      = var.vm_size
+  source        = "./modules/aks-cluster"
+  cluster_name  = var.cluster_name
+  location      = var.location
+  node_count    = var.node_count
+  vm_size       = var.vm_size
+  workers_count = var.workers_count
 }
 
-module "kubernetes-config" {
-  depends_on          = [module.aks-cluster]
-  source              = "./kubernetes-config"
-  cluster_name        = var.cluster_name
-  ARGOCD_PASSWORD     = var.ARGOCD_PASSWORD
+module "kubernetes_namespace_argocd" {
+  depends_on           = [module.aks-cluster]
+  source               = "./modules/kubernetes"
+  kubernetes_namespace = var.argocd_namespace
+}
+
+module "helm" {
+  depends_on      = [module.kubernetes_namespace_argocd, module.aks-cluster]
+  source          = "./modules/helm"
+  ARGOCD_PASSWORD = var.ARGOCD_PASSWORD
+  kubeconfig      = data.azurerm_kubernetes_cluster.default.kube_config_raw
+}
 
 
-  # Github Repo Config
-  github_repo                   = var.github_repo
-  branch                        = var.branch
-  backend_manifestfile_path     = var.backend_manifestfile_path
-  frontend_manifestfile_path    = var.frontend_manifestfile_path
 
-  kubeconfig   = data.azurerm_kubernetes_cluster.default.kube_config_raw
+
+module "kubernetes_namespace_backend" {
+  depends_on           = [module.aks-cluster]
+  source               = "./modules/kubernetes"
+  kubernetes_namespace = "sms-backend"
+}
+
+module "kubernetes_namespace_frontend" {
+  depends_on           = [module.aks-cluster]
+  source               = "./modules/kubernetes"
+  kubernetes_namespace = "sms-frontend"
+}
+module "argocd" {
+  depends_on                 = [module.helm, module.kubernetes_namespace_backend, module.kubernetes_namespace_frontend]
+  source                     = "./modules/argocd"
+  github_repo                = var.github_repo
+  branch                     = var.branch
+  backend_manifestfile_path  = var.backend_manifestfile_path
+  frontend_manifestfile_path = var.frontend_manifestfile_path
 }

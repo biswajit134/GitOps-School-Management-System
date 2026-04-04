@@ -1,11 +1,9 @@
-
-
 variable "kubernetes_version" {
   default = "1.18"
 }
 
 variable "workers_count" {
-  default = "3"
+  type = number
 }
 
 variable "cluster_name" {
