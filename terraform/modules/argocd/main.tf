@@ -23,6 +23,9 @@ resource "argocd_application" "sms-backend-app" {
       repo_url        = var.github_repo
       path            = var.backend_manifestfile_path
       target_revision = var.branch
+      helm {
+        release_name = "sms-backend"
+      }
     }
 
     sync_policy {
@@ -71,6 +74,9 @@ resource "argocd_application" "sms-frontend-app" {
       repo_url        = var.github_repo
       path            = var.frontend_manifestfile_path
       target_revision = var.branch
+      helm {
+        release_name = "sms-frontend"
+      }
     }
 
     sync_policy {

@@ -62,11 +62,11 @@ variable "branch" {
 
 variable "backend_manifestfile_path" {
   type    = string
-  default = "k8s_manifest/backend_manifest"
+  default = "app-helm/sms-backend"
 }
 
 variable "frontend_manifestfile_path" {
   type    = string
-  default = "k8s_manifest/frontend_manifest"
+  default = "app-helm/sms-frontend"
 }
  
