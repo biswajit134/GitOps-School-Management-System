@@ -60,9 +60,9 @@ jobs:
             continue-on-error: true
 
 
-          # - name: Run Gitleaks scan
-          #   run: |
-          #     gitleaks detect --source ./backend --exit-code 0 
+          - name: Run Gitleaks scan
+            run: |
+              gitleaks detect --source ./backend --exit-code 0 
 
 #=================================================================================================    
 # ./backend Setup
