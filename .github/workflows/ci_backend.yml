@@ -1,6 +1,6 @@
 # projectBaseDir: ./  # Set the base directory for the project (optional, defaults to the root of the repository)
 
-name:  DevSecOps CI Pipeline
+name:  DevSecOps CI backend Pipeline
 on:
     push:
         branches:
