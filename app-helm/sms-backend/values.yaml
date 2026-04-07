@@ -24,3 +24,10 @@ resources:
   limits:
     memory: "256Mi"
     cpu: "200m"
+
+# HPA configuration
+hpa:
+   averageUtilization: 50
+   minReplicas: 2
+   maxReplicas: 10
+
