@@ -11,7 +11,7 @@ env:
   REACT_APP_BASE_URL: "http://sms-backend-service.sms-backend.svc.cluster.local"
 # Service configuration
 service:
-  type: LoadBalancer
+  type: ClusterIP
   port: 3000
 
 
