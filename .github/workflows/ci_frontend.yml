@@ -1,5 +1,3 @@
-# projectBaseDir: ./  # Set the base directory for the project (optional, defaults to the root of the repository)
-
 name:  DevSecOps CI Pipeline
 on:
     push:
@@ -14,7 +12,6 @@ on:
         #     - "temp_sms_frontend_manifest/**"
         #     - "SS/**"
         paths:
-            - "backend/**"
             - "frontend/**"
             # - ".github/**"
 
@@ -22,7 +19,6 @@ on:
         branches:
             - main
     workflow_dispatch:
-        
         
 jobs:
     compile:
@@ -43,12 +39,6 @@ jobs:
             cd frontend
             find . -name "*.js" -exec node --check {} +
 
-        - name: Backend Compilation (syntax check)
-          run: |
-            cd backend
-            find . -name "*.js" -exec node --check {} +
-
-
 
 
     gitleaks_scan:
@@ -65,127 +55,9 @@ jobs:
 
           - name: Run Gitleaks scan
             run: |
-              gitleaks detect --source ./backend --exit-code 0 
               gitleaks detect --source ./frontend --exit-code 0
 
-#=================================================================================================    
-# ./backend Setup
-#=================================================================================================
-
-    oast_npm_backend_scan:
-        name: oast_npm_backend_scan
-        needs: gitleaks_scan
-        runs-on: ubuntu-latest
-        steps:
-          - name: Checkout code
-            uses: actions/checkout@v4
-
-          - name: Set up node js
-            uses: actions/setup-node@v4
-            with:
-              node-version: '20'
-          - name: Run oast npm scan
-            run: |
-              cd backend
-              npm install
-              # Redirect output to root directory for easy upload
-              npm audit --json > ../npm_audit_report.json || true
-
-          - name: Upload npm audit report
-            if: always()  # Ensure this step runs even if the previous step fails
-            uses: actions/upload-artifact@v7
-            with:
-              name: npm-backend-audit-report
-              path: npm_audit_report.json
-
-
-
-    trivy_backend_fs_scan:
-        name: trivy backend fs scan
-        needs: oast_npm_backend_scan
-        runs-on: ubuntu-24.04
-        steps:
-          - name: Checkout code
-            uses: actions/checkout@v4
-
-          - name: Run Trivy filesystem vulnerability scanner
-            uses: aquasecurity/trivy-action@master
-            with:
-              scan-type: 'fs'
-              scan-ref: './backend'
-              format: 'table'
-              ignore-unfixed: true
-              vuln-type: 'os,library'
-              severity: 'CRITICAL,HIGH'
-
-    sonarqube_backend_scan:
-      name: SonarQube backend Scan
-      runs-on: ubuntu-latest
-      needs: trivy_backend_fs_scan
-      steps:
-      - uses: actions/checkout@v4
-        with:
-          # Disabling shallow clones is recommended for improving the relevancy of reporting
-          fetch-depth: 0
-      - name: SonarQube backend Scan
-        uses: sonarsource/sonarcloud-github-action@v5.0.0 # Ex: v4.0.0, See the latest version at https://github.com/marketplace/actions/sonarcloud-scan
-        with:
-          projectBaseDir: './backend' # Set the base directory for the project (optional, defaults to the root of the repository)
-          args: >
-            -Dsonar.organization=biswajit-devsecops
-            -Dsonar.projectKey=biswajit-devsecops_gitops-school-management-system
-            -Dsonar.projectName=GitOps-School-Management-System
-            -Dsonar.sources=.
-            -Dsonar.sourceEncoding=UTF-8
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-
-    build_push_backend_image:
-        name: build_push_backend_image
-        runs-on: ubuntu-latest
-        needs: 
-            - sonarqube_backend_scan
-        steps:
-            - name: Checkout code
-              uses: actions/checkout@v2
-            - run: echo "Checked out code successful"
-
-            - name: Log in to Docker Hub
-              uses: docker/login-action@v1
-              with:
-                username: ${{ secrets.DOCKER_USERNAME }}
-                password: ${{ secrets.DOCKER_PASSWORD }}
-
-
-            - name: docker build images
-              run: |
-                docker build -t biswajit134/sms_backend:latest ./backend
-                echo "Docker images built successfully"
-
-            - name: Push images to Docker Hub
-              run: |
-                docker push biswajit134/sms_backend:latest
-                echo "Docker images pushed to Docker Hub successfully"
-
-
-
-    Trivy_backend_image_scan:
-        name: Trivy_backend_image_scan
-        needs: build_push_backend_image
-        runs-on: ubuntu-24.04
-        steps:
-          - name: Run Trivy vulnerability scanner
-            uses: aquasecurity/trivy-action@0.35.0
-            with:
-              scan-type: image   # Specify that we want to scan a container image
-              image-ref: 'docker.io/biswajit134/sms_backend:latest'
-              format: 'table'
-              exit-code: '0'
-              ignore-unfixed: true
-              vuln-type: 'os,library'
-              severity: 'CRITICAL,HIGH'
-
-
+              
 #=================================================================================================
 # ./frontend Setup
 #=================================================================================================
@@ -303,10 +175,3 @@ jobs:
               ignore-unfixed: true
               vuln-type: 'os,library'
               severity: 'CRITICAL,HIGH'
-
-
-# on:
-#   workflow_run:
-#     workflows: ["Terraform CI/CD"] # Name of the infra pipeline
-#     types:
-#       - completed
