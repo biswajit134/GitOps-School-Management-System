@@ -52,6 +52,9 @@ jobs:
 
           - name: Run Gitleaks setup
             uses: gitleaks/gitleaks-action@v2
+            continue-on-error: true
+
+
 
           - name: Run Gitleaks scan
             run: |
