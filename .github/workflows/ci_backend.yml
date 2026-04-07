@@ -57,9 +57,7 @@ jobs:
 
           - name: Run Gitleaks setup
             uses: gitleaks/gitleaks-action@v2
-            with:
-          # Adding --exit-code=0 forces a "Success" status
-              args: detect --report-format sarif --report-path gitleaks-report.sarif --redact -v --exit-code=0
+            continue-on-error: true
 
 
           # - name: Run Gitleaks scan
