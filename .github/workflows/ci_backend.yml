@@ -58,9 +58,14 @@ jobs:
           - name: Run Gitleaks setup
             uses: gitleaks/gitleaks-action@v2
 
-          - name: Run Gitleaks scan
-            run: |
-              gitleaks detect --source ./backend --exit-code 0 
+            with:
+              projectBaseDir: './backend' # Set the base directory for the project (optional, defaults to the root of the repository)
+              exit-code: '0'
+              ignore-unfixed: true
+
+          # - name: Run Gitleaks scan
+          #   run: |
+          #     gitleaks detect --source ./backend --exit-code 0 
 
 #=================================================================================================    
 # ./backend Setup
