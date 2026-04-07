@@ -15,10 +15,10 @@ service:
   port: 3000
 
 
-# resources:
-#   requests:
-#     memory: "64Mi"
-#     cpu: "50m"
-#   limits:
-#     memory: "256Mi"
-#     cpu: "200m"
+resources:
+  requests:
+    memory: "64Mi"
+    cpu: "50m"
+  limits:
+    memory: "256Mi"
+    cpu: "200m"
