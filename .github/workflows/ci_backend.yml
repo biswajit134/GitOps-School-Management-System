@@ -58,20 +58,10 @@ jobs:
           - name: Run Gitleaks setup
             uses: gitleaks/gitleaks-action@v2
 
-            env:
-              GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
-            with:
-          # This creates a SARIF report that integrates with GitHub Security tab
-              args: detect --report-format sarif --report-path gitleaks-report.sarif --redact -v
-          
-          - name: Upload Gitleaks SARIF report
-            if: always() # Upload even if leaks are found
-            uses: github/codeql-action/upload-sarif@v3
-            with:
-             sarif_file: gitleaks-report.sarif
-          # - name: Run Gitleaks scan
-          #   run: |
-          #     gitleaks detect --source ./backend --exit-code 0 
+
+          - name: Run Gitleaks scan
+            run: |
+              gitleaks detect --source ./backend --exit-code 0 
 
 #=================================================================================================    
 # ./backend Setup
