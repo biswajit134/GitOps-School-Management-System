@@ -28,6 +28,6 @@ resources:
 # HPA configuration
 hpa:
    averageUtilization: 50
-   minReplicas: 2
+   minReplicas: 5
    maxReplicas: 10
 

@@ -5,20 +5,20 @@ container:
   image: biswajit134/sms_frontend
   tag: latest
   imagePullPolicy: IfNotPresent
-  port: 3000
+  port: 80
 
 env:
   REACT_APP_BASE_URL: "http://sms-backend-service.sms-backend.svc.cluster.local"
 # Service configuration
 service:
-  type: ClusterIP
+  type: NodePort
   port: 3000
 
 
 resources:
   requests:
-    memory: "256Mi"
-    cpu: "200m"
+    memory: "64Mi"
+    cpu: "50m"
   limits:
     memory: "256Mi"
     cpu: "200m"
