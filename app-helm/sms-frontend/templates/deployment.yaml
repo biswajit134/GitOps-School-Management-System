@@ -4,7 +4,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ .Chart.Name }}-deployment
-  namespace: sms-backend
+  namespace: {{ .Chart.Name}}
   labels:
     app: {{ .Chart.Name }}
 spec:
@@ -23,12 +23,12 @@ spec:
         imagePullPolicy: {{ .Values.container.imagePullPolicy }}
         ports:
         - containerPort: {{ .Values.container.port }}
-        env:
-        - name: REACT_APP_BASE_URL
-          valueFrom:
-            configMapKeyRef:
-              name: {{ .Chart.Name }}-config
-              key: REACT_APP_BASE_URL
+        # env:
+        # - name: REACT_APP_BASE_URL
+        #   valueFrom:
+        #     configMapKeyRef:
+        #       name: {{ .Chart.Name }}-config
+        #       key: REACT_APP_BASE_URL
         resources:
           requests:
             memory: {{ .Values.resources.requests.memory }}
