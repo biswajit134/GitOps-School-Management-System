@@ -1,5 +1,5 @@
 # Deployment values for the SMS frontend application
-replicaCount: 5
+replicaCount: 2
 
 container:
   image: biswajit134/sms_backend
