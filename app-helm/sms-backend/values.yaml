@@ -26,8 +26,8 @@ resources:
     cpu: "200m"
 
 # HPA configuration
-hpa:
-   averageUtilization: 50
-   minReplicas: 5
-   maxReplicas: 10
+# hpa:
+#    averageUtilization: 50
+#    minReplicas: 5
+#    maxReplicas: 10
 
