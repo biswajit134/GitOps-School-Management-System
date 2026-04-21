@@ -11,7 +11,8 @@ env:
   REACT_APP_BASE_URL: "http://20.204.221.24:5000/"
 # Service configuration
 service:
-  type: LoadBalancer
+  # type: LoadBalancer
+  type: ClusterIP
   port: 3000
 
 
