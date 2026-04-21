@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: {{ .Chart.Name }}-secret
-  namespace: {{ .Chart.Name}}
+  namespace: sms-app
 type: Opaque
 data:
   MONGO_URL: {{ .Values.env.MONGO_URL }}
