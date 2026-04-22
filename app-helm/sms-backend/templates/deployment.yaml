@@ -16,6 +16,7 @@ spec:
     metadata:
       labels:
         app: {{ .Chart.Name }}
+        istio: monitor
     spec:
       containers:
       - name: {{ .Chart.Name }}
