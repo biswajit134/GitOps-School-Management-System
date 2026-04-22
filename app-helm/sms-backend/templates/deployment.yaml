@@ -17,6 +17,7 @@ spec:
       labels:
         app: {{ .Chart.Name }}
         istio: monitor
+        sidecar.istio.io/inject: "true"
     spec:
       containers:
       - name: {{ .Chart.Name }}
