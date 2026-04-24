@@ -15,7 +15,7 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm ci
 COPY . .
-ENV REACT_APP_BACKEND_URL=http://sms-backend-service
+ENV REACT_APP_BACKEND_URL=http://sms-backend-service.sms-app.svc.cluster.local
 RUN npm run build
 
 # Production stage
