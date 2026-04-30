@@ -36,7 +36,7 @@ COPY package*.json ./
 RUN npm ci
 COPY . .
 # Bake a placeholder — replaced at runtime by docker-entrypoint.sh
-ENV REACT_APP_BACKEND_URL=__REACT_APP_BACKEND_URL__
+ENV REACT_APP_BASE_URL=__REACT_APP_BACKEND_URL__
 RUN npm run build
  
 FROM nginx:alpine
