@@ -8,7 +8,7 @@ container:
   port: 80
 
 env:
-  REACT_APP_BASE_URL: "http://sms-backend-service"
+  REACT_APP_BASE_URL: "http://sms-backend-service.sms-app.svc.cluster.local:5000"
 # Service configuration
 service:
   type: LoadBalancer
